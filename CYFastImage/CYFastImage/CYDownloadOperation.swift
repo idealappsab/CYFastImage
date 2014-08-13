@@ -19,16 +19,12 @@ extension CYFastImage{
         var mExecuting: Bool
         var mFinished: Bool
         
-        init(){
+        override init(){
             data = NSMutableData()
             mExecuting = false
             mFinished = false
             
             super.init()
-        }
-        
-        deinit {
-            DEBUG_LOG("deinit: \(urlString)")
         }
         
         // MARK: helper
@@ -44,8 +40,6 @@ extension CYFastImage{
         
         // MARK: NSOperation
         override func start() {
-            DEBUG_LOG("start: \(urlString)")
-            
             if self.cancelled {
                 self.finished = true;
                 return;
@@ -71,7 +65,7 @@ extension CYFastImage{
         }
         
         override func cancel() {
-            DEBUG_LOG("cancel: \(urlString)")
+            //DEBUG_LOG("cancel: \(urlString)")
             
             if self.finished {
                 return

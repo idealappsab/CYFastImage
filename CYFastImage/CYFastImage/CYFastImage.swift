@@ -14,7 +14,3 @@ struct CYFastImage{
     static var sharedImageDownloader = CYImageDownloader()
     static var sharedImageManager = CYImageManager()
 }
-
-func DEBUG_LOG(format: String, args: CVarArg...) {
-    NSLog(format, args)
-}

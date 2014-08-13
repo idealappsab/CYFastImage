@@ -41,7 +41,7 @@ extension CYFastImage{
             if !delegate { return }
             
             var shouldCancelDownload = false
-            var infosNeedToRemove = Int[]()
+            var infosNeedToRemove = [Int]()
             
             var i:Int = 0;
             for downloadInfo: DownloadInfo in infosArray {

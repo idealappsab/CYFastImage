@@ -18,7 +18,7 @@ extension CYFastImage{
         var fileManager: NSFileManager
         var maxDiskCacheDuration: NSTimeInterval
         
-        init() {
+        override init() {
             cacheQueue = dispatch_queue_create("cyfastimage_cache_queue", nil)
             var paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
             defaultCachePath = paths[0] as NSString
@@ -67,7 +67,7 @@ extension CYFastImage{
                     
                     if !isExist {
                         self.fileManager.removeItemAtPath(self.defaultCachePath, error: nil)
-                        self.fileManager.createDirectoryAtPath(self.defaultCachePath, attributes: nil)
+                        self.fileManager.createDirectoryAtPath(self.defaultCachePath, withIntermediateDirectories: false, attributes: nil, error: nil)
                     }
                     
                     var cachePath = self.getcachePath(url)
@@ -83,7 +83,7 @@ extension CYFastImage{
             dispatch_async(cacheQueue) {
                 if self.fileManager.fileExistsAtPath(self.defaultCachePath) {
                     self.fileManager.removeItemAtPath(self.defaultCachePath, error: nil)
-                    self.fileManager.createDirectoryAtPath(self.defaultCachePath, attributes: nil)
+                    self.fileManager.createDirectoryAtPath(self.defaultCachePath, withIntermediateDirectories: false, attributes: nil, error: nil)
                 }
             }
         }
@@ -92,15 +92,15 @@ extension CYFastImage{
             dispatch_async(cacheQueue) {
                 var array = self.fileManager.contentsOfDirectoryAtPath(self.defaultCachePath, error: nil)
                 
-                var resourceKeys : String[] = [NSURLIsDirectoryKey, NSURLAttributeModificationDateKey]
+                var resourceKeys : [String] = [NSURLIsDirectoryKey, NSURLAttributeModificationDateKey]
                 var expireDate: NSDate = NSDate(timeIntervalSinceNow: -self.maxDiskCacheDuration)
-                var fileToRemove = String[]()
+                var fileToRemove = [String]()
                 
                 for item : AnyObject in array {
                     if let fileName = item as? NSString {
                         var path = self.defaultCachePath.stringByAppendingPathComponent(fileName)
                         var url = NSURL(fileURLWithPath: path)
-                        var value = url.resourceValuesForKeys(resourceKeys, error: nil)
+                        var value: NSDictionary = url.resourceValuesForKeys(resourceKeys, error: nil)
                         if let isDir = value[NSURLIsDirectoryKey].boolValue {
                             if isDir {
                                 continue
@@ -124,7 +124,7 @@ extension CYFastImage{
         // MARK: helper
         func getcachePath(url: String!) -> String! {
             var hashValue = url?.hashValue
-            var key = hashValue.description
+            var key = hashValue!.description
             var cacheFilePath = defaultCachePath.stringByAppendingPathComponent(key)
             return cacheFilePath
         }

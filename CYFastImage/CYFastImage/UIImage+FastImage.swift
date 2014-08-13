@@ -31,8 +31,7 @@ extension UIImage {
         CGContextDrawImage(context, rect, self.CGImage)
         var newImageRef = CGBitmapContextCreateImage(context)
         var newImage = UIImage(CGImage: newImageRef)
-        CGContextRelease(context)
-        
+
         return newImage
     }
 }

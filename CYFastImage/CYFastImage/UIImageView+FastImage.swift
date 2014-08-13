@@ -25,7 +25,7 @@ extension UIImageView {
             CYFastImage.sharedImageManager.getImage(url, delegate: self) {
                 [weak self]
                 (image: UIImage!, url: String!) -> Void in
-                if self {
+                if self != nil {
                     if image {
                         if NSThread.isMainThread() {
                             self!.image = image
